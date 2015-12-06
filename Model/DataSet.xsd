@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSet" targetNamespace="http://tempuri.org/DataSet.xsd" xmlns:mstns="http://tempuri.org/DataSet.xsd" xmlns="http://tempuri.org/DataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet" msprop:Generator_UserDSName="DataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Building_materials" msprop:Generator_TableClassName="Building_materialsDataTable" msprop:Generator_TableVarName="tableBuilding_materials" msprop:Generator_RowChangedName="Building_materialsRowChanged" msprop:Generator_TablePropName="Building_materials" msprop:Generator_RowDeletingName="Building_materialsRowDeleting" msprop:Generator_RowChangingName="Building_materialsRowChanging" msprop:Generator_RowEvHandlerName="Building_materialsRowChangeEventHandler" msprop:Generator_RowDeletedName="Building_materialsRowDeleted" msprop:Generator_RowClassName="Building_materialsRow" msprop:Generator_UserTableName="Building_materials" msprop:Generator_RowEvArgName="Building_materialsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" minOccurs="0" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
+              <xs:element name="Density" msprop:Generator_ColumnVarNameInTable="columnDensity" msprop:Generator_ColumnPropNameInRow="Density" msprop:Generator_ColumnPropNameInTable="DensityColumn" msprop:Generator_UserColumnName="Density" type="xs:double" minOccurs="0" />
+              <xs:element name="SpecificHeat" msprop:Generator_ColumnVarNameInTable="columnSpecificHeat" msprop:Generator_ColumnPropNameInRow="SpecificHeat" msprop:Generator_ColumnPropNameInTable="SpecificHeatColumn" msprop:Generator_UserColumnName="SpecificHeat" type="xs:double" minOccurs="0" />
+              <xs:element name="ThermalConductivity" msprop:Generator_ColumnVarNameInTable="columnThermalConductivity" msprop:Generator_ColumnPropNameInRow="ThermalConductivity" msprop:Generator_ColumnPropNameInTable="ThermalConductivityColumn" msprop:Generator_UserColumnName="ThermalConductivity" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1">
+      <xs:selector xpath=".//mstns:Building_materials" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
