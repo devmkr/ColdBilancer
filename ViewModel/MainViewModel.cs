@@ -1,6 +1,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -32,8 +33,10 @@ namespace ColdBilancer.ViewModel
             }
         }
 
-        public ObservableCollection<CBWall> WallColl { get; set; }
-        
+
+        public ObservableCollection<IDrawable> DrawnElements { get; set; }
+
+        public ObservableCollection<CBWallType> WallColl { get; set; }        
         public ObservableCollection<string> TypeWallColl
         {
             get
@@ -49,10 +52,25 @@ namespace ColdBilancer.ViewModel
         public MainViewModel()
         {
             _model = new CBModel();
-            WallColl = new ObservableCollection<CBWall>(_model.Walls);
+            WallColl = new ObservableCollection<CBWallType>(_model.Walls);
+
+            //Just for test purpose:
+
+            var l = new List<IDrawable>();
+            foreach(var z in _model.Walls)
+            {
+                l.Add(new CBWallViewModel(z, 10, 10));
+            }
+
+            l.Add(new CBWallViewModel(new CBWallType("a", new CBDimensions(100, 20, 10), 0.1), 10, 20, 45));
+
+            DrawnElements = new ObservableCollection<IDrawable>(l);
+
+            RaisePropertyChanged(nameof(DrawnElements));
 
             //Subscribing...
-            _model.PropertyChanged += (e, s) => { RaisePropertyChanged(nameof(WallColl)); RaisePropertyChanged(nameof(TypeWallColl)); };
+            _model.PropertyChanged += (e, s) => { RaisePropertyChanged(nameof(WallColl));
+                                                  RaisePropertyChanged(nameof(TypeWallColl));};
         }
     }
 }

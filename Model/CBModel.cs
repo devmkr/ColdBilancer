@@ -9,20 +9,19 @@ namespace ColdBilancer
 {
     public class CBModel : INotifyPropertyChanged
     {
-        public List<CBWall> Walls { get; set; }
+        public List<CBWallType> Walls { get; set; }
 
         public CBModel()
         {
-            Walls = new List<CBWall>();
+            Walls = new List<CBWallType>();
 
-            Walls.Add(new CBWall("SZ1", new CBDimensions(10, 10, 10), 0.3));
-            Walls.Add(new CBWall("SZ2", new CBDimensions(10, 10, 10), 0.4));
-            Walls.Add(new CBWall("SZ3", new CBDimensions(10, 10, 10), 0.4));
+            Walls.Add(new CBWallType("SZ1", new CBDimensions(100, 100, 10), 10));
+            Walls.Add(new CBWallType("SZ2", new CBDimensions(100, 100, 10), 0.4));
+            Walls.Add(new CBWallType("SZ3", new CBDimensions(100, 100, 10), 0.4));
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
     }
 
     public class CBBuilidingMaterial
@@ -33,13 +32,7 @@ namespace ColdBilancer
         public string Name { get; private set; }
 
     }
-
-    interface IHeatEchangeable
-    {
-        double ThermalTransmitance { get; set; }
-        double Area { get; set; }
-    }
-   
+         
     /// <summary>
     /// Base class describes the basic properties of building. 
     /// </summary>
@@ -69,7 +62,7 @@ namespace ColdBilancer
         public CBDimensions Dimensions { get; protected set; }
     }
     
-    public class CBWall : CBBuildingElement
+    public class CBWallType : CBBuildingElement
     {
         private double _heatTransferCoeff;
 
@@ -80,7 +73,7 @@ namespace ColdBilancer
         {
             get
             {
-                return WallLayers.Sum(x => x.Item2);
+                return  Dimensions.Thickness;
             }
         }        
         /// <summary>
@@ -115,7 +108,7 @@ namespace ColdBilancer
         {
             get
             {
-                return Dimensions.Witdh * Dimensions.Height - AreaCorrection;
+                return Dimensions.Length * Dimensions.Height - AreaCorrection;
             }
         }
 
@@ -129,7 +122,7 @@ namespace ColdBilancer
                 return EmbeddedElements.Sum(x => x.Area);
             }
         }
-        public CBWallTypes WallType
+        public CBWallLocation WallType
         {
             get; private set;
         }
@@ -140,7 +133,7 @@ namespace ColdBilancer
         /// Main constructor for common initializing. 
         /// </summary>
         /// <param name="dimensions"></param>
-        private CBWall(string name, CBDimensions dimensions, CBWallTypes wt)
+        private CBWallType(string name, CBDimensions dimensions, CBWallLocation wt)
         {
             Dimensions = dimensions;
             WallType = wt;
@@ -153,17 +146,18 @@ namespace ColdBilancer
         /// Create wall in accordance with given layers.
         /// </summary>
         /// <param name="layers">Collection of tuple: building material and thickness of layers is SI Unit (m)</param>
-        public CBWall(string name, CBDimensions dimensions, List<Tuple<CBBuilidingMaterial, double>> layers, CBWallTypes walltype = CBWallTypes.external)
+        public CBWallType(string name, CBDimensions dimensions, List<Tuple<CBBuilidingMaterial, double>> layers, CBWallLocation walltype = CBWallLocation.external)
             : this(name, dimensions, walltype)  
-        {
+        {            
             WallLayers = layers;
+            Dimensions.Thickness = WallLayers.Sum(x => x.Item2);
         }
 
         /// <summary>
         /// Create wall with given U value.
         /// </summary>
         /// <param name="u">Heat transfer coefficient of wall in SI Unit (W/m2) </param>      
-        public CBWall(string name, CBDimensions dimensions, double u, CBWallTypes walltype = CBWallTypes.external) 
+        public CBWallType(string name, CBDimensions dimensions, double u, CBWallLocation walltype = CBWallLocation.external) 
             : this(name, dimensions,walltype)
         {
             HeatTransferCoeff = u; 
@@ -177,11 +171,8 @@ namespace ColdBilancer
                 throw new ArgumentException(embeddeelement.ToString());
 
            EmbeddedElements.Remove(embeddeelement);
-        }
+        }       
         
-
-
-
     }
 
     public class CBDoor : CBBuildingElement
@@ -193,7 +184,7 @@ namespace ColdBilancer
         {
             get
             {
-                return Dimensions.Witdh * Dimensions.Height;
+                return Dimensions.Length * Dimensions.Height;
             }
         }
 
@@ -229,20 +220,20 @@ namespace ColdBilancer
 
     public class CBDimensions : IEquatable<CBDimensions>
     {
-        public double Witdh { get; set; }
+        public double Length { get; set; }
         public double Height { get; set; }
         public double Thickness { get; set; }
 
-        public CBDimensions(double witdh, double height, double thickness)
+        public CBDimensions(double length, double height, double thickness)
         {
-            Witdh = witdh;
+            Length = length;
             Height = height;
             Thickness = thickness;
         }
 
         public bool Equals(CBDimensions other)
         {
-            return Witdh == other.Witdh &&
+            return Length == other.Length &&
                    Height == other.Height &&
                    Thickness == other.Thickness;
         }
@@ -250,13 +241,25 @@ namespace ColdBilancer
 
 
 
-    public enum CBWallTypes
+    public enum CBWallLocation
     {
         external,
         internatl,
         floor,
         slab,
         
+    }
+
+    public enum Orientation
+    {
+        N,
+        NE,
+        E,
+        SE,
+        S,
+        SW,
+        W,
+        NW
     }
 
 }

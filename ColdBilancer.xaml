@@ -5,53 +5,79 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ColdBilancer"
         mc:Ignorable="d"
-        Title="ColdBilancer" Height="400" Width="600"
+        Title="ColdBilancer" Height="600" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         Background="LightGray">
-    <Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Save"/>
+                <MenuItem Header="_Close"/>
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel>
-        <StackPanel Height="auto" VerticalAlignment="Stretch" Margin="5">
-                <ScrollViewer Height="300" VerticalAlignment="Stretch" 
+            <StackPanel>
+                <StackPanel Height="auto" VerticalAlignment="Stretch" Margin="5">
+                    <ScrollViewer Height="500" VerticalAlignment="Stretch" 
                               VerticalContentAlignment="Stretch"
                               VerticalScrollBarVisibility="Visible"
                               HorizontalScrollBarVisibility="Visible">
-                    <Border BorderBrush="Black" BorderThickness="1">
-                        <ItemsControl>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>                                
-                                              <Canvas  VerticalAlignment="Stretch" Background="White" />                                
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <ItemsControl ItemsSource="{Binding Path=DrawnElements}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas  VerticalAlignment="Stretch" Background="White" />                                                                          
                                     </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </Border>
-                </ScrollViewer>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Path Data="{Binding Path=PathGeometry}"
+                                              StrokeThickness="1"
+                                              Stroke="Aqua"
+                                              Fill="Aqua"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                    </ScrollViewer>
 
+                </StackPanel>
+                <WrapPanel Margin="5">
+                    <CheckBox x:Name="osnapBtn" Content="OSNAP"/>
+                    <CheckBox x:Name="orthoBtn" Content="ORTHO"/>
+                    <CheckBox x:Name="connBtn" Content="GRID"/>
+                    <CheckBox x:Name="snapBtn" Content="SNAP"/>
+                    <Button Height="20" Width="45" Content="Undo" Margin="10,0,10,0"/>
+                    <Button Height="20" Width="45" Content="Redo" Margin="10,0,10,0"/>
+                </WrapPanel>
             </StackPanel>
-        <WrapPanel Margin="5">
-                <CheckBox x:Name="osnapBtn" Content="OSNAP"/>
-                <CheckBox x:Name="orthoBtn" Content="ORTHO"/>
-                <CheckBox x:Name="connBtn" Content="GRID"/>
-                <CheckBox x:Name="snapBtn" Content="SNAP"/>
-                <Button Height="20" Width="45" Content="Undo" Margin="10,0,10,0"/>
-                <Button Height="20" Width="45" Content="Redo" Margin="10,0,10,0"/>
+                <DockPanel Grid.Column="2">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBox Text="Selected space:" Background="LightGray"/>
+                    <ComboBox/>
+                    <TextBox Text="Selected wall:" Background="LightGray"/>
+                    <ComboBox ItemsSource="{Binding WallColl}"
+                                  DisplayMemberPath="Name"
+                                  SelectedValuePath="Name"/>
+                    <Button Height="20" Width="100" Command="{Binding OpenEditWallsWindow}" Content="Define walls" Margin="10"/>
+                </StackPanel>
+                <DataGrid>
+                    
+                </DataGrid>   
+                
+            </DockPanel>
+
+        </Grid>
+
+        <StatusBar Height="10">
+            <WrapPanel>
+                <TextBlock Text="Test"/>
             </WrapPanel>
-        </StackPanel>
-        <StackPanel Grid.Column="2">
-            <TextBox Text="Selected space:" Background="LightGray"/>
-            <ComboBox/>
-            <TextBox Text="Selected wall:" Background="LightGray"/>
-            <ComboBox ItemsSource="{Binding WallColl}"
-                      DisplayMemberPath="Name"
-                      SelectedValuePath="Name"/>
-            <Button Height="20" Width="100" Command="{Binding OpenEditWallsWindow}" Content="Define walls" Margin="10"/>
-         
-
-        </StackPanel>
-        
-
-    </Grid>
+        </StatusBar>
+    </DockPanel>
 </Window>

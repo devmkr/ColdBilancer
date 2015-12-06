@@ -85,10 +85,10 @@
       <DependentUpon>DataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Model\TreeNode.cs" />
     <Compile Include="MaterialsView.xaml.cs">
       <DependentUpon>MaterialsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CBViewModel.cs" />
     <Compile Include="ViewModel\EditWallsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MaterialsViewModel.cs" />

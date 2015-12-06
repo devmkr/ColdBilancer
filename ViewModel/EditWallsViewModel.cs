@@ -35,7 +35,7 @@ namespace ColdBilancer.ViewModel
             }
         }
 
-        public ObservableCollection<CBWall> WallColl { get; set; }
+        public ObservableCollection<CBWallType> WallColl { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the EditWallsViewModel class.
@@ -49,7 +49,7 @@ namespace ColdBilancer.ViewModel
         private void Init(CBModel model)
         {
             _model = model;
-            WallColl = new ObservableCollection<CBWall>(_model.Walls);
+            WallColl = new ObservableCollection<CBWallType>(_model.Walls);
             _model.PropertyChanged += (s, e) => { RaisePropertyChanged(nameof(WallColl)); };
             RaisePropertyChanged(nameof(WallColl));
         }

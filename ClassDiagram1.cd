@@ -7,26 +7,37 @@
       <FileName>App.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ColdBilancer.DataSet" Collapsed="true">
-    <Position X="5.25" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAgAAAwAAAAJABAAAQQAAAAgCQBgAEAAAAAEABBA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ColdBilancer.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="1.5" Width="1.5" />
+  <Class Name="ColdBilancer.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>ColdBilancer.xaml.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.158" Collapsed="true" />
   </Class>
-  <Class Name="ColdBilancer.CBModel" Collapsed="true">
+  <Class Name="ColdBilancer.EditWallsView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EditWallsView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ColdBilancer.MaterialsView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialsView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ColdBilancer.CBModel" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="10.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Model\CBModel.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ColdBilancer.CBBuilidingMaterial" Collapsed="true">
     <Position X="7" Y="0.5" Width="1.5" />
@@ -35,66 +46,100 @@
       <FileName>Model\CBModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ColdBilancer.CBBuildingElement" Collapsed="true">
-    <Position X="1.75" Y="0.5" Width="1.5" />
+  <Class Name="ColdBilancer.CBBuildingElement">
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAACAAQAAAAA=</HashCode>
       <FileName>Model\CBModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ColdBilancer.CBWall" Collapsed="true">
-    <Position X="2.75" Y="1.75" Width="1.5" />
+  <Class Name="ColdBilancer.CBWallType">
+    <Position X="1" Y="2.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>EACgAAAAIAABAAAAAAAAAAAAgAAAAAAAgACAAQAAAAA=</HashCode>
+      <HashCode>EACgAAAAIAABAAAAAAAAAAAAgAAAAAAAgACAAQAQAAA=</HashCode>
       <FileName>Model\CBModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ColdBilancer.CBDimensions" Collapsed="true">
-    <Position X="1.5" Y="3.25" Width="1.5" />
+  <Class Name="ColdBilancer.CBDoor">
+    <Position X="3.25" Y="2.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAACAAQAAAAA=</HashCode>
       <FileName>Model\CBModel.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ColdBilancer.CBSpace" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\CBModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColdBilancer.CBDimensions" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAABAAAAgAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\CBModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ColdBilancer.Model.DataSet" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAwAAAAJABAAAQQAAAAgCQBgAEAAAAAEABBA=</HashCode>
+    </TypeIdentifier>
   </Class>
   <Class Name="ColdBilancer.Properties.Resources" Collapsed="true">
-    <Position X="10.5" Y="1.5" Width="1.5" />
+    <Position X="5.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="ColdBilancer.Properties.Settings" Collapsed="true">
-    <Position X="5.25" Y="2.5" Width="1.5" />
+    <Position X="9.25" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="ColdBilancer.ViewModel.MainViewModel" Collapsed="true">
-    <Position X="7" Y="1.5" Width="1.5" />
+  <Class Name="ColdBilancer.ViewModel.EditWallsViewModel" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAABAAAAAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgAAAgAAACAAAAAAAAAAAAACAAAAAEA=</HashCode>
+      <FileName>ViewModel\EditWallsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColdBilancer.ViewModel.MainViewModel" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAABAAAIgAAAgAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ViewModel\MainViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="ColdBilancer.ViewModel.MaterialsViewModel" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\MaterialsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="ColdBilancer.ViewModel.ViewModelLocator" Collapsed="true">
-    <Position X="7" Y="2.5" Width="1.5" />
+    <Position X="10.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAABEAAAAA=</HashCode>
       <FileName>ViewModel\ViewModelLocator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="ColdBilancer.IHeatEchangeable" Collapsed="true">
-    <Position X="5.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
-      <FileName>Model\CBModel.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Enum Name="ColdBilancer.CBWallTypes" Collapsed="true">
+  <Enum Name="ColdBilancer.CBWallLocation">
     <Position X="5.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAICAAAAIAAAAAAA=</HashCode>
       <FileName>Model\CBModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ColdBilancer.ViewModel.MessagesType">
+    <Position X="7" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEEAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ViewModel\MessegeType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

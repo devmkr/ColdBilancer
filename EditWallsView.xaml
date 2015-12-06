@@ -8,7 +8,7 @@
         DataContext="{Binding EditWalls, Source={StaticResource Locator}}"
         Width="400" Height="400" ResizeMode="NoResize" >
 
-    <Grid>
+    
         <StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="10" Height="120">
             <DataGrid ItemsSource="{Binding WallColl, Mode=OneWay}" AutoGenerateColumns="False" CanUserResizeColumns="True">
@@ -38,11 +38,11 @@
                     </ScrollViewer>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="2.0*"/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Width="120" Margin="5" Grid.Column="0"/>
+                        <ComboBox Width="100" Margin="5" Grid.Column="0"/>
                         <Button Content="Insert" Margin="5" Width="50" Grid.Column="1"/>
                         <Button Content="Edit materials" Margin="5" Width="50" Grid.Column="2" Command="{Binding OpenMaterialsWindow}"/>
                     </Grid>
@@ -69,5 +69,5 @@
         </StackPanel>
         
         
-    </Grid>
+   
 </Window>

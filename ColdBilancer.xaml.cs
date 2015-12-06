@@ -28,6 +28,7 @@ namespace ColdBilancer
             Messenger.Default.Register<MessagesType>(this, NotificationMessageReceived);
 
         }
+                
         private void NotificationMessageReceived(MessagesType msg)
         {
             if (msg == MessagesType.OpenMaterialView)
@@ -41,5 +42,8 @@ namespace ColdBilancer
                 view.Show();
             }
         }
+
+
+
     }
 }
