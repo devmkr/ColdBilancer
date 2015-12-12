@@ -4,24 +4,68 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+
 
 namespace ColdBilancer
 {
     public class CBModel : INotifyPropertyChanged
     {
-        public List<CBWallType> Walls { get; set; }
+        public List<CBWallType> WallsType { get; private set; }
+        public List<CBWall> Walls { get; private set; }
 
         public CBModel()
         {
-            Walls = new List<CBWallType>();
-
-            Walls.Add(new CBWallType("SZ1", new CBDimensions(100, 100, 10), 10));
-            Walls.Add(new CBWallType("SZ2", new CBDimensions(100, 100, 10), 0.4));
-            Walls.Add(new CBWallType("SZ3", new CBDimensions(100, 100, 10), 0.4));
-            
+            WallsType = new List<CBWallType>();
+            Walls = new List<CBWall>();           
+        }
+        public void AddWall(CBWall wall)
+        {
+            Walls.Add(wall);            
+        }
+        public void RemoveWall(CBWall wall)
+        {
+            if (!Walls.Remove(wall))
+                throw new ArgumentOutOfRangeException();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+    }
+
+    public class CBWall
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public CBWallType Type { get; private set; }
+
+        public CBDimensions Dimensions { get; private set; }
+
+        public Orientation Oritentation { get; private set; }
+
+        public Tuple<Point,Point> StartEndPoints { get; private set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="height"></param>
+        public CBWall(CBWallType type, Point start, Point end, double height)
+        {
+            StartEndPoints = new Tuple<Point, Point>(start, end);
+            Type = type;
+
+            //Distance between two points...
+            var length = Math.Sqrt(Math.Pow(end.X - start.X, 2.0) + Math.Pow(end.Y - start.Y, 2.0));
+
+            //Wrapping dimensions to one object
+            Dimensions = new CBDimensions(length, height, type.Thickness);
+        }
+
+        
+
     }
 
     public class CBBuilidingMaterial
@@ -32,55 +76,40 @@ namespace ColdBilancer
         public string Name { get; private set; }
 
     }
-         
+
     /// <summary>
     /// Base class describes the basic properties of building. 
     /// </summary>
-   public abstract class CBBuildingElement
+    public abstract class CBBuildingElement
     {
         /// <summary>
         /// Heat transfer coefficient of building element
         /// Value should be returned in SI Units (W/(sqm*K))
         /// </summary>
-        abstract public double HeatTransferCoeff { get; protected set; }
+        abstract public double HeatTransferCoeff { get; protected set; }       
 
-        /// <summary>
-        /// Area of heat exchange.
-        /// Value should be returned in SI Units (sqm)
-        /// </summary>
-        abstract public double Area { get; }
-        
         /// <summary>
         /// Name of building elements
         /// Should be implement change Name.
         /// </summary>
         public string Name { get; protected set; }
-        /// <summary>
-        /// Dimensions of builidng elements.
-        /// Value should be returned in SI Units (m,m,m)
-        /// </summary>
-        public CBDimensions Dimensions { get; protected set; }
+      
     }
-    
+
     public class CBWallType : CBBuildingElement
     {
-        private double _heatTransferCoeff;
+        private double _heatTransferCoeff;     
 
         /// <summary>
         /// Overall thickness of the wall
         /// </summary>
-        public double Thickness
-        {
-            get
-            {
-                return  Dimensions.Thickness;
-            }
-        }        
+        public double Thickness { get; private set; }
+      
         /// <summary>
         /// List of wall layers. Index of list represents the order following order. 
         /// T2 in tuple represents the thickness of the layer.
         /// </summary>
-        public List<Tuple<CBBuilidingMaterial,double>> WallLayers { get; private set; }
+        public List<Tuple<CBBuilidingMaterial, double>> WallLayers { get; private set; }
 
         /// <summary>
         /// Heat transfer coefficient of wall.
@@ -94,128 +123,85 @@ namespace ColdBilancer
                 return (WallLayers != null) ? 1 / WallLayers.Sum(x => x.Item2 / x.Item1.ThermalConducivity)
                                             : _heatTransferCoeff;
             }
-           protected set
+            protected set
             {
                 _heatTransferCoeff = value;
             }
-         
-        }                
 
-        /// <summary>
-        /// Area of heat exchange.
-        /// </summary>
-        public override double Area
-        {
-            get
-            {
-                return Dimensions.Length * Dimensions.Height - AreaCorrection;
-            }
-        }
+        }      
 
-        /// <summary>
-        /// Area of openings, doors, windows embedded in the wall. 
-        /// </summary>
-        public double AreaCorrection
-        {
-            get
-            {
-                return EmbeddedElements.Sum(x => x.Area);
-            }
-        }
+       
         public CBWallLocation WallType
         {
             get; private set;
         }
 
-        public List<CBBuildingElement> EmbeddedElements { get; private set; }
+
 
         /// <summary>
         /// Main constructor for common initializing. 
         /// </summary>
         /// <param name="dimensions"></param>
-        private CBWallType(string name, CBDimensions dimensions, CBWallLocation wt)
+        private CBWallType(string name, CBWallLocation wt)
         {
-            Dimensions = dimensions;
             WallType = wt;
             Name = name;
-
-            EmbeddedElements = new List<CBBuildingElement>();
         }
 
         /// <summary>
         /// Create wall in accordance with given layers.
         /// </summary>
         /// <param name="layers">Collection of tuple: building material and thickness of layers is SI Unit (m)</param>
-        public CBWallType(string name, CBDimensions dimensions, List<Tuple<CBBuilidingMaterial, double>> layers, CBWallLocation walltype = CBWallLocation.external)
-            : this(name, dimensions, walltype)  
-        {            
+        public CBWallType(string name, List<Tuple<CBBuilidingMaterial, double>> layers, CBWallLocation walltype = CBWallLocation.external)
+            : this(name,  walltype)
+        {
             WallLayers = layers;
-            Dimensions.Thickness = WallLayers.Sum(x => x.Item2);
+            Thickness = WallLayers.Sum(x => x.Item2);            
         }
 
         /// <summary>
-        /// Create wall with given U value.
+        /// Create wall with given U value and wall Thickness
         /// </summary>
         /// <param name="u">Heat transfer coefficient of wall in SI Unit (W/m2) </param>      
-        public CBWallType(string name, CBDimensions dimensions, double u, CBWallLocation walltype = CBWallLocation.external) 
-            : this(name, dimensions,walltype)
+        public CBWallType(string name, double u, double thickness, CBWallLocation walltype = CBWallLocation.external)
+            : this(name, walltype)
         {
-            HeatTransferCoeff = u; 
-        }
+            Thickness = thickness;
+            HeatTransferCoeff = u;
+        }     
 
-        internal void AddEmbeddedElement(CBBuildingElement embeddedelement) => EmbeddedElements.Add(embeddedelement);
-    
-        internal void RemoveEmbeddedElement(CBBuildingElement embeddeelement)
-        {
-            if(!EmbeddedElements.Contains(embeddeelement))            
-                throw new ArgumentException(embeddeelement.ToString());
-
-           EmbeddedElements.Remove(embeddeelement);
-        }       
-        
     }
 
     public class CBDoor : CBBuildingElement
     {
-        /// <summary>
-        /// Door area
-        /// </summary>
-        public override double Area
-        {
-            get
-            {
-                return Dimensions.Length * Dimensions.Height;
-            }
-        }
 
+        public CBDimensions Dimensions { get; private set; }
         /// <summary>
         /// Heat transfer coefficient of door
         /// </summary>
         override public double HeatTransferCoeff
         {
             get; protected set;
-           
+
         }
-        public CBBuildingElement PatternElement { get; private set; }
+        public CBWall PatternElement { get; private set; }
 
         /// <summary>
         /// Create new door
         /// </summary>
         /// <param name="dimensions">dimensions of the door in SI Unit</param>
         /// <param name="heatTransferCoeef">Heat transfer coefficient of door in SI Unit (W/m2) </param>
-        public CBDoor(CBDimensions dimensions, double heatTransferCoeef, CBBuildingElement patternElement)
+        public CBDoor(CBDimensions dimensions, double heatTransferCoeef)
         {
             Dimensions = dimensions;
-            HeatTransferCoeff = heatTransferCoeef;
-            PatternElement = patternElement;
+            HeatTransferCoeff = heatTransferCoeef;         
         }
     }
     public class CBSpace
     {
         public int Id { get; set; }
-        public string Name { get; private set; }     
-
-
+        public string Name { get; private set; }
+        //TO DO write class
     }
 
     public class CBDimensions : IEquatable<CBDimensions>
@@ -239,15 +225,13 @@ namespace ColdBilancer
         }
     }
 
-
-
     public enum CBWallLocation
     {
         external,
         internatl,
         floor,
         slab,
-        
+
     }
 
     public enum Orientation

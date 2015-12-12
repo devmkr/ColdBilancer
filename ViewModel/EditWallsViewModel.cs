@@ -29,7 +29,7 @@ namespace ColdBilancer.ViewModel
                     ?? (_openMaterialsWindow = new RelayCommand(
                     () =>
                     {
-                        Messenger.Default.Send(MessagesType.OpenMaterialView);
+                        Messenger.Default.Send(MessagesTypes.OpenMaterialView);
                         
                     }));
             }
@@ -42,14 +42,14 @@ namespace ColdBilancer.ViewModel
         /// </summary>
         public EditWallsViewModel()
         {
-            MessengerInstance.Register<CBModel>(this,MessagesType.PassModel,  x => Init(x));
+            MessengerInstance.Register<CBModel>(this,MessagesTypes.PassModel,  x => Init(x));
 
          }
 
         private void Init(CBModel model)
         {
             _model = model;
-            WallColl = new ObservableCollection<CBWallType>(_model.Walls);
+            WallColl = new ObservableCollection<CBWallType>(_model.WallsType);
             _model.PropertyChanged += (s, e) => { RaisePropertyChanged(nameof(WallColl)); };
             RaisePropertyChanged(nameof(WallColl));
         }

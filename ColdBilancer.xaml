@@ -3,7 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ColdBilancer"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:ColdBilancer"       
+        xmlns:Controls="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
+        xmlns:cmd="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="ColdBilancer" Height="600" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
@@ -17,46 +20,67 @@
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Top">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <StackPanel>
                 <StackPanel Height="auto" VerticalAlignment="Stretch" Margin="5">
-                    <ScrollViewer Height="500" VerticalAlignment="Stretch" 
-                              VerticalContentAlignment="Stretch"
-                              VerticalScrollBarVisibility="Visible"
-                              HorizontalScrollBarVisibility="Visible">
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <ItemsControl ItemsSource="{Binding Path=DrawnElements}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Canvas  VerticalAlignment="Stretch" Background="White" />                                                                          
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Path Data="{Binding Path=PathGeometry}"
-                                              StrokeThickness="1"
-                                              Stroke="Aqua"
-                                              Fill="Aqua"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Border>
-                    </ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Path=DrawnElements}" Height="500" Style="{StaticResource ResourceKey={x:Type ItemsControl}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Background="White"/>
+                                
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <Controls:ZoomControl x:Name="cnvMain" >
+                                    <ItemsPresenter/>
+                                    <!--Draw wall block-->
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <cmd:EventToCommand Command="{Binding DrawWall, Mode=OneWay}"
+                                                                EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                                                EventArgsConverterParameter="{Binding ElementName=cnvMain}"
+                                                                PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
 
+                                        <i:EventTrigger EventName="MouseMove">
+
+                                            <cmd:EventToCommand Command="{Binding FindOsnap, Mode=OneTime}"
+                                                                EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                                                EventArgsConverterParameter="{Binding ElementName=cnvMain}"
+                                                                PassEventArgsToCommand="True"/>
+
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Controls:ZoomControl>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!--Representation of wall-->
+                                <Path Data="{Binding Path=Geometry}"
+                                                  StrokeThickness="1"
+                                                  Stroke="Aqua"
+                                                  Fill="Aqua"/>
+                              
+                            </DataTemplate>
+                            
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
                 <WrapPanel Margin="5">
                     <CheckBox x:Name="osnapBtn" Content="OSNAP"/>
                     <CheckBox x:Name="orthoBtn" Content="ORTHO"/>
                     <CheckBox x:Name="connBtn" Content="GRID"/>
                     <CheckBox x:Name="snapBtn" Content="SNAP"/>
-                    <Button Height="20" Width="45" Content="Undo" Margin="10,0,10,0"/>
-                    <Button Height="20" Width="45" Content="Redo" Margin="10,0,10,0"/>
+                    <Button Height="20" Width="45" Content="Undo" Margin="10,0,2,0"/>
+                    <Button Height="20" Width="45" Content="Redo" Margin="10,0,2,0"/>
                 </WrapPanel>
             </StackPanel>
-                <DockPanel Grid.Column="2">
+            <DockPanel Grid.Column="2">
                 <StackPanel DockPanel.Dock="Top">
                     <TextBox Text="Selected space:" Background="LightGray"/>
                     <ComboBox/>
@@ -67,9 +91,9 @@
                     <Button Height="20" Width="100" Command="{Binding OpenEditWallsWindow}" Content="Define walls" Margin="10"/>
                 </StackPanel>
                 <DataGrid>
-                    
-                </DataGrid>   
-                
+
+                </DataGrid>
+
             </DockPanel>
 
         </Grid>

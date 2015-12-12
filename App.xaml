@@ -2,6 +2,7 @@
   <Application.Resources>
     <ResourceDictionary>
       <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:ColdBilancer.ViewModel" />
+      <local:MouseButtonEventArgsToPointConverter x:Key="MouseButtonEventArgsToPointConverter" />
     </ResourceDictionary>
   </Application.Resources>
 </Application>

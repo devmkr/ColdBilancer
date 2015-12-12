@@ -1,20 +1,52 @@
+using ColdBilancer.Helpers;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 
 namespace ColdBilancer.ViewModel
 {
-  
+
     public class MainViewModel : ViewModelBase
     {
 
         private CBModel _model;
-              
+
 
         private RelayCommand _openEditWallsWindow;
+     
+        private List<IDrawable> _drawnWalls;
+
+        //TO DO mvvm property
+        public int OnsapRadius { get; set; }
+
+        /// <summary>
+        /// The <see cref="OsnapPoint" /> property's name.
+        /// </summary>
+
+
+        private Point? _osnapPoint;
+
+        /// <summary>
+        /// Sets and gets the SnapPoint property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public Point? OsnapPoint
+        {
+            get
+            {
+                return _osnapPoint;
+            }
+            set
+            {
+                Set(nameof(OsnapPoint), ref _osnapPoint, value);
+            }
+        }                   
+
 
         /// <summary>
         /// Gets the MyCommand.
@@ -27,8 +59,56 @@ namespace ColdBilancer.ViewModel
                     ?? (_openEditWallsWindow = new RelayCommand(
                     () =>
                     {
-                        Messenger.Default.Send(MessagesType.OpenWallView);
-                        Messenger.Default.Send(_model, MessagesType.PassModel);
+                        Messenger.Default.Send(MessagesTypes.OpenWallView);
+                        Messenger.Default.Send(_model, MessagesTypes.PassModel);
+                    }));
+            }
+        }
+
+        private RelayCommand<Point> _findOsnap;
+
+        /// <summary>
+        /// Gets the MyCommand.
+        /// </summary>
+        public RelayCommand<Point> FindOsnap
+        {
+            get
+            {
+                return _findOsnap
+                    ?? (_findOsnap = new RelayCommand<Point>(
+                    p =>
+                    {
+                        SetOnapPoint(p);
+                    }));
+            }
+        }
+
+
+        private Point? _start = null;
+
+        private RelayCommand<Point> _drawWall;
+
+        /// <summary>
+        /// Gets the DrawWall.
+        /// </summary>
+        public RelayCommand<Point> DrawWall
+        {
+            get
+            {
+                return _drawWall
+                    ?? (_drawWall = new RelayCommand<Point>(
+                    p =>
+                    {
+                        if (!_start.HasValue)
+                        {
+                            _start = p;
+                        }
+                        else
+                        {
+                            DrawWallBetweenPoints(_start.Value, p);
+                            _start = null;
+                        }
+
                     }));
             }
         }
@@ -36,15 +116,14 @@ namespace ColdBilancer.ViewModel
 
         public ObservableCollection<IDrawable> DrawnElements { get; set; }
 
-        public ObservableCollection<CBWallType> WallColl { get; set; }        
+        public ObservableCollection<CBWallType> WallColl { get; set; }
         public ObservableCollection<string> TypeWallColl
         {
             get
             {
-                return new ObservableCollection<string>(_model.Walls.Select(x => x.Name));
+                return new ObservableCollection<string>(_model.WallsType.Select(x => x.Name));
             }
         }
-
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -52,25 +131,53 @@ namespace ColdBilancer.ViewModel
         public MainViewModel()
         {
             _model = new CBModel();
-            WallColl = new ObservableCollection<CBWallType>(_model.Walls);
+            WallColl = new ObservableCollection<CBWallType>(_model.WallsType);
 
-            //Just for test purpose:
+            //TO DO "dehard" value
+            OnsapRadius = 20;
+            //TO DO more elegant solution
 
-            var l = new List<IDrawable>();
-            foreach(var z in _model.Walls)
-            {
-                l.Add(new CBWallViewModel(z, 10, 10));
-            }
-
-            l.Add(new CBWallViewModel(new CBWallType("a", new CBDimensions(100, 20, 10), 0.1), 10, 20, 45));
-
-            DrawnElements = new ObservableCollection<IDrawable>(l);
-
+            _drawnWalls = new List<IDrawable>();
+            DrawnElements = new ObservableCollection<IDrawable>(_drawnWalls);
             RaisePropertyChanged(nameof(DrawnElements));
 
             //Subscribing...
-            _model.PropertyChanged += (e, s) => { RaisePropertyChanged(nameof(WallColl));
-                                                  RaisePropertyChanged(nameof(TypeWallColl));};
+            _model.PropertyChanged += (e, s) =>
+            {
+                RaisePropertyChanged(nameof(WallColl));
+                RaisePropertyChanged(nameof(TypeWallColl));
+            };
         }
+
+        private void DrawWallBetweenPoints(Point start, Point end)
+        {
+
+            var addedWall = new CBWall(new CBWallType("sz1", 1.0, 10.0), start, end, 4.0);
+            _model.AddWall(addedWall);
+            _drawnWalls.Add(new CBWallViewModel(addedWall));
+            DrawnElements = new ObservableCollection<IDrawable>(_drawnWalls);
+            RaisePropertyChanged(nameof(DrawnElements));
+        }
+
+        public void SetOnapPoint(Point p)
+        {
+            if (OsnapPoint.HasValue)
+
+                OsnapPoint = PointsOperations.IsPointInsideRadius(OsnapPoint.Value, p, OnsapRadius) ? OsnapPoint : null;
+
+            else if (_drawnWalls.Count > 0)
+
+                OsnapPoint = _drawnWalls.SelectMany(x => x.SnapPoints)
+                                        .Where(x => PointsOperations.IsPointInsideRadius(p, x, OnsapRadius))
+                                        .OrderBy(x => PointsOperations.DistanceBetweenPoints(x, p))
+                                        .FirstOrDefault();
+
+#if (DEBUG)
+            Debug.WriteLine(OsnapPoint.HasValue);
+#endif
+
+        }
+
+
     }
 }

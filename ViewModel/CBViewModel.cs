@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ColdBilancer.Helpers;
+using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,32 +7,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using static System.Math;
+
 
 namespace ColdBilancer.ViewModel
 {
-    public interface IDrawable      
+    public interface IDrawable
     {
         /// <summary>
         /// 
         /// </summary>
-        CBBuildingElement ModelElement { get; }
+        CBWall ModelElement { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        Geometry PathGeometry { get; }
+        Geometry Geometry { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        double X { get; }
+        List<Point> SnapPoints { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        double Y { get; }
-
-        double Rotation { get; }       
+        double RotationAngle { get; }
 
     }
 
@@ -40,12 +35,10 @@ namespace ColdBilancer.ViewModel
     /// </summary>
     public class CBWallViewModel : ViewModelBase, IDrawable
     {
-        private CBBuildingElement _modelElement;
-        private double _x;
-        private double _y;
-        private double _rotation;
+        private CBWall _modelElement;
+        private List<Point> _snapPoints;
 
-        public CBBuildingElement ModelElement
+        public CBWall ModelElement
         {
             get
             {
@@ -57,80 +50,49 @@ namespace ColdBilancer.ViewModel
             }
         }
 
-        public Geometry PathGeometry
+        public Geometry Geometry
         {
             get
             {
-                return System.Windows.Media.PathGeometry.CreateFromGeometry(                 
-                        new RectangleGeometry(new Rect(X, Y, _modelElement.Dimensions.Length, _modelElement.Dimensions.Thickness),0,0, new RotateTransform(Rotation)));                        
-                  
+                return new RectangleGeometry(new Rect(new Size(_modelElement.Dimensions.Length, _modelElement.Dimensions.Thickness)), 0, 0,
+                                            //Rotate and offset the rectangle:
+                                            new MatrixTransform(Cos(RotationAngle), Sin(RotationAngle), -Sin(RotationAngle), Cos(RotationAngle),
+                                                                _modelElement.StartEndPoints.Item1.X, _modelElement.StartEndPoints.Item1.Y));               
+                
             }
         }
-        /// <summary>
-        /// Start point representing top-left
-        /// </summary>
-        public double X
-        {
-            get
-            {
-                return _x;
-            }
-            set
-            {
-                _x = value;
-                RaisePropertyChanged(nameof(X));
-                RaisePropertyChanged(nameof(PathGeometry));
-            }
-        }
+      
 
         /// <summary>
-        /// Start point representing top-left
+        /// 
         /// </summary>
-        public double Y
+        public double RotationAngle
         {
             get
             {
-                return _y;
+                return PointsOperations.AngleBetweenPoints(_modelElement.StartEndPoints.Item1, _modelElement.StartEndPoints.Item2);
             }
-            set
-            {
-                _y = value;
-                RaisePropertyChanged(nameof(Y));
-                RaisePropertyChanged(nameof(PathGeometry));
-            }
+
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public double Rotation
+        public List<Point> SnapPoints
         {
             get
             {
-                return _rotation;
-            }
-            set
-            {
-                _rotation = value;
-                RaisePropertyChanged(nameof(Rotation));
+                return _snapPoints;
             }
         }
-        
-              
-        public CBWallViewModel(CBWallType wall, double x, double y, double rotation = 0)
-        {
-            X = x;
-            Y = y;
-            _modelElement = wall;
-            Rotation = rotation;
-        }
 
-        public CBWallViewModel(CBWallType wall, Point start, Point end)           
+        public CBWallViewModel(CBWall wall)
         {
-            //TODO rotation calculation and etc.
+            ModelElement = wall;
+            _snapPoints = new List<Point>() { wall.StartEndPoints.Item1, wall.StartEndPoints.Item2 };
 
         }
-        
+
     }
 
 }

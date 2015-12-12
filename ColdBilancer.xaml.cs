@@ -25,25 +25,23 @@ namespace ColdBilancer
         public MainWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<MessagesType>(this, NotificationMessageReceived);
-
+            Messenger.Default.Register<MessagesTypes>(this, NotificationMessageReceived);
         }
-                
-        private void NotificationMessageReceived(MessagesType msg)
-        {
-            if (msg == MessagesType.OpenMaterialView)
+
+        //Messenger member
+        private void NotificationMessageReceived(MessagesTypes msg)
+        {         
+            if (msg == MessagesTypes.OpenMaterialView)
             {
                 var view = new MaterialsView();
                 view.Show();
             }
-            else if(msg == MessagesType.OpenWallView)
+            else if (msg == MessagesTypes.OpenWallView)
             {
                 var view = new EditWallsView();
                 view.Show();
             }
         }
-
-
 
     }
 }

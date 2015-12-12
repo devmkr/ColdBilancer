@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ColdBilancer.ViewModel
 {
-    enum MessagesType
+    enum MessagesTypes
     {
         OpenWallView,
         OpenMaterialView,

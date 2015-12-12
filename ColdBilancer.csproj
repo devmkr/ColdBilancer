@@ -54,7 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -75,9 +75,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\MouseButtonEventArgsToPointConverter.cs" />
     <Compile Include="EditWallsView.xaml.cs">
       <DependentUpon>EditWallsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PointsOperations.cs" />
     <Compile Include="Model\CBModel.cs" />
     <Compile Include="Model\DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -89,10 +91,11 @@
       <DependentUpon>MaterialsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CBViewModel.cs" />
+    <Compile Include="ViewModel\DrawModes.cs" />
     <Compile Include="ViewModel\EditWallsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MaterialsViewModel.cs" />
-    <Compile Include="ViewModel\MessegeType.cs" />
+    <Compile Include="ViewModel\MessagesTypes.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="ColdBilancer.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -157,6 +160,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WPFExtensions-v1.0-source\Source\WPFExtensions\WPFExtensions\WPFExtensions.csproj">
+      <Project>{a7915102-8326-4862-96f0-4eb80ed087b4}</Project>
+      <Name>WPFExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
